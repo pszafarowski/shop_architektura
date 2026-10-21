@@ -1,0 +1,48 @@
+@baseUrl = http://localhost:8080
+
+### Utwórz zamówienie i zapamiętaj jego identyfikator
+POST {{baseUrl}}/orders
+Content-Type: application/json
+
+{
+  "customerName": "Jan Kowalski",
+  "productName": "Książka",
+  "quantity": 2,
+  "unitPrice": 19.99
+}
+
+> {% client.global.set("orderId", response.body.id); %}
+
+### Pobierz listę zamówień
+GET {{baseUrl}}/orders
+
+### Pobierz utworzone zamówienie
+GET {{baseUrl}}/orders/{{orderId}}
+
+### Zaktualizuj zamówienie
+PUT {{baseUrl}}/orders/{{orderId}}
+Content-Type: application/json
+
+{
+  "customerName": "Anna Nowak",
+  "productName": "Notes",
+  "quantity": 3,
+  "unitPrice": 5.50
+}
+
+### Błędne dane — oczekiwany status 400
+POST {{baseUrl}}/orders
+Content-Type: application/json
+
+{
+  "customerName": "",
+  "productName": "Książka",
+  "quantity": 0,
+  "unitPrice": -1
+}
+
+### Usuń zamówienie
+DELETE {{baseUrl}}/orders/{{orderId}}
+
+### Usunięte zamówienie — oczekiwany status 404
+GET {{baseUrl}}/orders/{{orderId}}
